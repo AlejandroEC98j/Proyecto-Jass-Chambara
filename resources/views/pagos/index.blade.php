@@ -1,41 +1,45 @@
 @extends('layouts.app')
 
-@section('title', 'Agregar Medidor')
+@section('title', 'Lista de Pagos')
 
 @section('content')
     <div class="bg-white p-6 rounded shadow">
-        <h1 class="text-xl font-bold mb-4">Nuevo Medidor</h1>
+        <h1 class="text-xl font-bold mb-4">Pagos Realizados</h1>
 
-        <form action="{{ route('medidores.store') }}" method="POST">
-            @csrf
-            <div class="mb-4">
-                <label class="block font-bold">Número de Serie</label>
-                <input type="text" name="numero_serie" class="w-full border px-3 py-2">
-            </div>
+        @if(session('success'))
+            <p class="bg-green-500 text-white p-2 rounded mb-4">{{ session('success') }}</p>
+        @endif
 
-            <div class="mb-4">
-                <label class="block font-bold">Cliente</label>
-                <select name="cliente_id" class="w-full border px-3 py-2">
-                    @foreach($clientes as $cliente)
-                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">Factura</th>
+                    <th class="border border-gray-300 px-4 py-2">Fecha</th>
+                    <th class="border border-gray-300 px-4 py-2">Monto</th>
+                    <th class="border border-gray-300 px-4 py-2">Método</th>
+                    <th class="border border-gray-300 px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($pagos as $pago)
+                    <tr class="border border-gray-300">
+                        <td class="border px-4 py-2">{{ $pago->factura->id }}</td>
+                        <td class="border px-4 py-2">{{ $pago->fecha }}</td>
+                        <td class="border px-4 py-2">{{ $pago->monto }}</td>
+                        <td class="border px-4 py-2">{{ $pago->metodo }}</td>
+                        <td class="border px-4 py-2">
+                            <a href="{{ route('pagos.edit', $pago) }}" class="text-blue-500">Editar</a>
+                            <form action="{{ route('pagos.destroy', $pago) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 ml-2">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-            <div class="mb-4">
-                <label class="block font-bold">Ubicación</label>
-                <input type="text" name="ubicacion" class="w-full border px-3 py-2">
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-bold">Estado</label>
-                <select name="estado" class="w-full border px-3 py-2">
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
-                </select>
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
-        </form>
+        <a href="{{ route('pagos.create') }}" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">Agregar Pago</a>
     </div>
 @endsection
