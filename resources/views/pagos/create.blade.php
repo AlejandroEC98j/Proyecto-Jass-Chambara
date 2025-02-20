@@ -1,40 +1,40 @@
 @extends('layouts.app')
 
+@section('title', 'Registrar Pago')
+
 @section('content')
-<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <!-- Contenedor principal -->
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-6">
+        <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">{{ __('Registrar Pago') }}</h2>
 
-    <h1 class="text-2xl font-bold mb-6 text-center text-gray-700">Registrar Pago</h1>
+        <form action="{{ route('pagos.store') }}" method="POST" class="space-y-4">
+            @csrf
 
-    <!-- Formulario para registrar el pago -->
-    <form action="{{ route('pagos.store') }}" method="POST" class="space-y-6">
-        @csrf
+            @foreach ([
+                'monto_pagado' => 'Monto Pagado',
+                'fecha_pago' => 'Fecha de Pago'
+            ] as $field => $label)
+                <div>
+                    <x-input-label for="{{ $field }}" :value="__($label)" />
+                    <x-text-input id="{{ $field }}" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500"
+                                  type="{{ $field == 'monto_pagado' ? 'number' : 'date' }}" step="0.01" name="{{ $field }}" value="{{ old($field) }}" required />
+                    <x-input-error :messages="$errors->get($field)" class="mt-2" />
+                </div>
+            @endforeach
 
-        <!-- Campo de monto pagado -->
-        <div>
-            <label for="monto_pagado" class="block font-medium text-gray-700">Monto Pagado</label>
-            <input type="number" name="monto_pagado" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300" id="monto_pagado" required>
-            <div class="text-red-500 text-sm mt-2" id="monto_pagado_error"></div>
-        </div>
+            <!-- Factura ID (oculto) -->
+            <input type="hidden" name="factura_id" value="{{ $factura->id }}">
 
-        <!-- Campo de fecha de pago -->
-        <div>
-            <label for="fecha_pago" class="block font-medium text-gray-700">Fecha de Pago</label>
-            <input type="date" name="fecha_pago" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300" id="fecha_pago" required>
-            <div class="text-red-500 text-sm mt-2" id="fecha_pago_error"></div>
-        </div>
+            <!-- Botones de acción -->
+            <div class="flex justify-between">
+                <a href="{{ route('pagos.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:ring-2 focus:ring-gray-400">
+                    {{ __('Volver al listado de pagos') }}
+                </a>
+                <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500">
+                    {{ __('Registrar Pago') }}
+                </x-primary-button>
+            </div>
+        </form>
+    </div>
 
-        <!-- Campo de factura_id (oculto) -->
-        <input type="hidden" name="factura_id" value="{{ $factura->id }}">
-
-        <!-- Botón de enviar -->
-        <div class="flex justify-end gap-4">
-            <a href="{{ route('pagos.index') }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-600 transition duration-300">
-                Volver al listado de pagos
-            </a>
-            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-                Registrar Pago
-            </button>
-        </div>
-    </form>
-</div>
-@endsection
+    @endsection

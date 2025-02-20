@@ -1,4 +1,9 @@
-<x-guest-layout>
+@extends('layouts.app')
+
+@section('title', 'Nuevo Cliente')
+
+@section('content')
+
     <!-- Contenedor principal -->
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">{{ __('Nuevo Cliente') }}</h2>
@@ -30,12 +35,19 @@
                 <x-input-error :messages="$errors->get('tipo_contrato')" class="mt-2" />
             </div>
 
-            <!-- Botón de envío -->
-            <div class="flex justify-end">
+            <!-- Botones de acción -->
+            <div class="flex justify-between">
+                <!-- Botón de Cancelar -->
+                <a href="{{ route('clientes.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:ring-2 focus:ring-gray-400">
+                    {{ __('Cancelar') }}
+                </a>
+
+                <!-- Botón de Guardar -->
                 <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500">
                     {{ __('Guardar Cliente') }}
                 </x-primary-button>
             </div>
         </form>
     </div>
-</x-guest-layout>
+
+@endsection

@@ -14,8 +14,11 @@ class PagoController extends Controller
         // Obtener todos los pagos registrados
         $pagos = Pago::all();
 
-        // Pasar los pagos a la vista
-        return view('pagos.index', compact('pagos'));
+        // Obtener todas las facturas disponibles
+        $facturas = Factura::all();
+
+        // Pasar pagos y facturas a la vista
+        return view('pagos.index', compact('pagos', 'facturas'));
     }
 
     // Mostrar el formulario para registrar un pago

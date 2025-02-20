@@ -40,4 +40,10 @@ class Factura extends Model
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class);
+    }
+
 }

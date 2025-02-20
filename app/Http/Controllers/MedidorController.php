@@ -35,7 +35,7 @@ class MedidorController extends Controller
             'direccion' => 'required|string|max:255',
         ]);
 
-        Medidor::create($request->only(['cliente_id', 'numero_serie', 'lectura_actual', 'estado', 'direccion']));
+        Medidor::create($request->all());
 
         return redirect()->route('medidores.index')->with('success', 'Medidor agregado correctamente.');
     }
