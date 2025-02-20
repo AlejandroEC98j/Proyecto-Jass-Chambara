@@ -1,27 +1,28 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <!-- Mensaje de seguridad -->
+    <div class="mb-6 text-sm text-gray-600 dark:text-gray-400 text-center">
+        {{ __('Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.') }}
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+    <!-- Formulario para confirmar la contraseña -->
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <form method="POST" action="{{ route('password.confirm') }}">
+            @csrf
 
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
+            <!-- Password -->
+            <div>
+                <x-input-label for="password" :value="__('Contraseña')" />
+                <x-text-input id="password" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                type="password" name="password" required autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
-    </form>
+            <!-- Botón de confirmación -->
+            <div class="flex justify-end mt-6">
+                <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    {{ __('Confirmar') }}
+                </x-primary-button>
+            </div>
+        </form>
+    </div>
 </x-guest-layout>
