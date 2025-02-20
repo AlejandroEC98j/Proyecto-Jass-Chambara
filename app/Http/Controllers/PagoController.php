@@ -2,59 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pago;
-use App\Models\Cliente;
+use App\Models\Factura;
+use Illuminate\Http\Request;
 
 class PagoController extends Controller
 {
-    public function index()
+    // Mostrar el formulario para crear un nuevo pago
+    public function create($factura_id)
     {
-        $pagos = Pago::with('cliente')->get();
-        return view('pagos.index', compact('pagos'));
+        $factura = Factura::findOrFail($factura_id); // Encuentra la factura asociada
+        return view('pagos.create', compact('factura')); // Pasa la factura a la vista
     }
 
-    public function create()
-    {
-        $clientes = Cliente::all();
-        return view('pagos.create', compact('clientes'));
-    }
-
+    // Almacenar el pago en la base de datos
     public function store(Request $request)
     {
+        // Validación de los campos del formulario
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'monto' => 'required|numeric|min:0',
-            'fecha' => 'required|date',
-            'metodo_pago' => 'required|string'
+            'factura_id' => 'required|exists:facturas,id', // Verifica que la factura exista
+            'monto_pagado' => 'required|numeric', // Verifica que el monto sea numérico
+            'fecha_pago' => 'required|date', // Verifica que la fecha sea válida
         ]);
 
-        Pago::create($request->all());
-        return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
-    }
-
-    public function edit(Pago $pago)
-    {
-        $clientes = Cliente::all();
-        return view('pagos.edit', compact('pago', 'clientes'));
-    }
-
-    public function update(Request $request, Pago $pago)
-    {
-        $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'monto' => 'required|numeric|min:0',
-            'fecha' => 'required|date',
-            'metodo_pago' => 'required|string'
+        // Crear un nuevo pago en la base de datos
+        Pago::create([
+            'factura_id' => $request->factura_id,
+            'monto_pagado' => $request->monto_pagado,
+            'fecha_pago' => $request->fecha_pago,
         ]);
 
-        $pago->update($request->all());
-        return redirect()->route('pagos.index')->with('success', 'Pago actualizado correctamente.');
-    }
-
-    public function destroy(Pago $pago)
-    {
-        $pago->delete();
-        return redirect()->route('pagos.index')->with('success', 'Pago eliminado correctamente.');
+        // Redirige a la lista de pagos o a la vista de facturas con un mensaje de éxito
+        return redirect()->route('facturas.index')->with('success', 'Pago registrado correctamente.');
     }
 }

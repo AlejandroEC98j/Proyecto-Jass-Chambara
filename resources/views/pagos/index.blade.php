@@ -1,45 +1,55 @@
+<!-- resources/views/pagos/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Lista de Pagos')
 
 @section('content')
-    <div class="bg-white p-6 rounded shadow">
-        <h1 class="text-xl font-bold mb-4">Pagos Realizados</h1>
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">Pagos Registrados</h1>
 
         @if(session('success'))
-            <p class="bg-green-500 text-white p-2 rounded mb-4">{{ session('success') }}</p>
+            <div class="bg-green-500 text-white p-3 rounded-md mb-4 text-center">
+                {{ session('success') }}
+            </div>
         @endif
 
-        <table class="w-full border-collapse border border-gray-300">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">Factura</th>
-                    <th class="border border-gray-300 px-4 py-2">Fecha</th>
-                    <th class="border border-gray-300 px-4 py-2">Monto</th>
-                    <th class="border border-gray-300 px-4 py-2">Método</th>
-                    <th class="border border-gray-300 px-4 py-2">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($pagos as $pago)
-                    <tr class="border border-gray-300">
-                        <td class="border px-4 py-2">{{ $pago->factura->id }}</td>
-                        <td class="border px-4 py-2">{{ $pago->fecha }}</td>
-                        <td class="border px-4 py-2">{{ $pago->monto }}</td>
-                        <td class="border px-4 py-2">{{ $pago->metodo }}</td>
-                        <td class="border px-4 py-2">
-                            <a href="{{ route('pagos.edit', $pago) }}" class="text-blue-500">Editar</a>
-                            <form action="{{ route('pagos.destroy', $pago) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 ml-2">Eliminar</button>
-                            </form>
-                        </td>
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+                <thead class="bg-gray-200">
+                    <tr class="text-gray-700">
+                        <th class="border border-gray-300 px-4 py-2">Factura</th>
+                        <th class="border border-gray-300 px-4 py-2">Monto Pagado</th>
+                        <th class="border border-gray-300 px-4 py-2">Fecha de Pago</th>
+                        <th class="border border-gray-300 px-4 py-2">Estado de la Factura</th>
+                        <th class="border border-gray-300 px-4 py-2">Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($pagos as $pago)
+                        <tr class="border border-gray-300 hover:bg-gray-100 transition">
+                            <td class="border px-4 py-2 text-center">{{ $pago->factura->numero_factura }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $pago->monto_pagado }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $pago->fecha_pago }}</td>
+                            <td class="border px-4 py-2 text-center">
+                                {{ $pago->factura->estado_pago }}
+                            </td>
+                            <td class="border px-4 py-2 text-center">
+                                @if($pago->factura->estado_pago == 'Pendiente')
+                                    <a href="{{ route('pagos.create') }}" class="text-blue-500 font-semibold hover:underline">Registrar Pago</a>
+                                @else
+                                    Pagado
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        <a href="{{ route('pagos.create') }}" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">Agregar Pago</a>
+        <div class="mt-6 text-center">
+            <a href="{{ route('pagos.create') }}" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                Registrar Pago
+            </a>
+        </div>
     </div>
 @endsection

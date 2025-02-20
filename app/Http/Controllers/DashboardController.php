@@ -9,13 +9,25 @@ use App\Models\Factura;
 
 class DashboardController extends Controller
 {
+    /**
+     * Constructor: Aplica middleware para restringir acceso solo a usuarios autenticados.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Muestra la vista del dashboard con estadísticas generales.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
-        return view('dashboard', [
-            'totalClientes' => Cliente::count(),
-            'totalMedidores' => Medidor::count(),
-            'totalFacturas' => Factura::count(),
-        ]);
+        $totalClientes = Cliente::count();
+        $totalMedidores = Medidor::count();
+        $totalFacturas = Factura::count();
+
+        return view('dashboard', compact('totalClientes', 'totalMedidores', 'totalFacturas'));
     }
 }
-

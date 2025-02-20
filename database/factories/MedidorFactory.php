@@ -14,8 +14,6 @@ class MedidorFactory extends Factory
         return [
             'cliente_id' => Cliente::factory(),
             'numero_serie' => $this->faker->unique()->numerify('M####'),
-            'lectura_actual' => $this->faker->randomFloat(2, 0, 1000),
-            'lectura_anterior' => $this->faker->randomFloat(2, 0, 1000),
         ];
     }
 }

@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::all();
-        return view('clientes.index', compact('clientes'));
+        try {
+            $clientes = Cliente::all();
+            return view('clientes.index', compact('clientes'));
+        } catch (\Exception $e) {
+            Log::error('Error al obtener clientes: ' . $e->getMessage());
+            return redirect()->route('clientes.index')->with('error', 'Error al cargar clientes.');
+        }
     }
 
     public function create()
@@ -21,15 +27,20 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
-            'direccion' => 'required',
-            'telefono' => 'nullable',
-            'correo' => 'nullable|email',
-            'tipo_contrato' => 'required'
+            'nombre' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'nullable|string|max:15',
+            'correo' => 'nullable|email|max:255',
+            'tipo_contrato' => 'required|string|max:50'
         ]);
 
-        Cliente::create($request->all());
-        return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
+        try {
+            Cliente::create($request->all());
+            return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error al crear cliente: ' . $e->getMessage());
+            return redirect()->route('clientes.create')->with('error', 'Error al crear el cliente.');
+        }
     }
 
     public function edit(Cliente $cliente)
@@ -40,20 +51,30 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $request->validate([
-            'nombre' => 'required',
-            'direccion' => 'required',
-            'telefono' => 'nullable',
-            'correo' => 'nullable|email',
-            'tipo_contrato' => 'required'
+            'nombre' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'nullable|string|max:15',
+            'correo' => 'nullable|email|max:255',
+            'tipo_contrato' => 'required|string|max:50'
         ]);
 
-        $cliente->update($request->all());
-        return redirect()->route('clientes.index')->with('success', 'Cliente actualizado.');
+        try {
+            $cliente->update($request->all());
+            return redirect()->route('clientes.index')->with('success', 'Cliente actualizado correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar cliente: ' . $e->getMessage());
+            return redirect()->route('clientes.edit', $cliente)->with('error', 'Error al actualizar el cliente.');
+        }
     }
 
     public function destroy(Cliente $cliente)
     {
-        $cliente->delete();
-        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado.');
+        try {
+            $cliente->delete();
+            return redirect()->route('clientes.index')->with('success', 'Cliente eliminado correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar cliente: ' . $e->getMessage());
+            return redirect()->route('clientes.index')->with('error', 'Error al eliminar el cliente.');
+        }
     }
 }

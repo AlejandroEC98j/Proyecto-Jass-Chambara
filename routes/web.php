@@ -8,17 +8,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\PagoController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Aquí se registran las rutas de la aplicación. Se agrupan por middleware
-| y se organizan para una mejor mantenibilidad.
-|
-*/
-
-// Página principal
+// Página principal: Redirige al login si no está autenticado
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -31,21 +21,23 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
     // Perfil de usuario
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
-    // Rutas de Clientes
-    Route::resource('clientes', ClienteController::class);
-    // Rutas de Medidores
-    Route::resource('medidores', MedidorController::class);
-
-    // Rutas de Facturas
-    Route::resource('facturas', FacturaController::class);
-
-    // Rutas de Pago
-    Route::resource('pagos', PagoController::class)->middleware('auth');
+    // Rutas de gestión de entidades
+    Route::resources([
+        'clientes'  => ClienteController::class,
+        'facturas'  => FacturaController::class,
+        'pagos'     => PagoController::class,
+    ]);
 });
+
+Route::resource('medidores', MedidorController::class)->parameters([
+    'medidores' => 'medidor' // Cambia 'medidore' a 'medidor'
+]);
 
 // Incluir rutas de autenticación (login, register, etc.)
 require __DIR__.'/auth.php';

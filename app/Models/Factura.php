@@ -8,15 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 class Factura extends Model
 {
     use HasFactory;
-    protected $fillable = ['cliente_id', 'fecha_emision', 'monto', 'estado'];
 
-    public function cliente()
+    // Si el nombre de la tabla es diferente a 'facturas', agrega esta línea
+    // protected $table = 'nombre_de_tu_tabla';
+
+    // Campos que son fechas
+    protected $dates = ['fecha_emision', 'fecha_vencimiento'];
+
+    public function getFechaEmisionAttribute($value)
     {
-        return $this->belongsTo(Cliente::class);
+        return \Carbon\Carbon::parse($value);
     }
 
-    public function pagos()
+    public function getFechaVencimientoAttribute($value)
     {
-        return $this->hasMany(Pago::class);
+        return \Carbon\Carbon::parse($value);
+    }
+
+    // Definir los campos asignables
+    protected $fillable = [
+        'cliente_id',
+        'numero_factura',
+        'monto_total',
+        'estado',
+        'fecha_emision',
+        'fecha_vencimiento',
+    ];
+
+    // Relación con el cliente
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 }
