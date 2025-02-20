@@ -3,62 +3,73 @@
 @section('title', 'Editar Factura')
 
 @section('content')
-    <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">Editar Factura</h1>
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-center mb-6 text-cyan-600">{{ __('Editar Factura') }}</h2>
 
-        <form action="{{ route('facturas.update', $factura->id) }}" method="POST" class="space-y-4">
+        <form action="{{ route('facturas.update', $factura->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
             <!-- Cliente -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Cliente</label>
-                <select name="cliente_id" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <x-input-label for="cliente_id" :value="__('Cliente')" />
+                <select name="cliente_id" id="cliente_id" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
                     @foreach($clientes as $cliente)
                         <option value="{{ $cliente->id }}" {{ $cliente->id == $factura->cliente_id ? 'selected' : '' }}>
                             {{ $cliente->nombre }}
                         </option>
                     @endforeach
                 </select>
+                <x-input-error :messages="$errors->get('cliente_id')" class="mt-2" />
             </div>
 
-            <!-- Número de factura -->
+            <!-- Número de Factura -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Número de Factura</label>
-                <input type="text" name="numero_factura" value="{{ $factura->numero_factura }}" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <x-input-label for="numero_factura" :value="__('Número de Factura')" />
+                <x-text-input id="numero_factura" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              type="text" name="numero_factura" :value="$factura->numero_factura" required />
+                <x-input-error :messages="$errors->get('numero_factura')" class="mt-2" />
             </div>
 
-            <!-- Monto total -->
+            <!-- Monto Total -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Monto Total</label>
-                <input type="number" name="monto_total" value="{{ $factura->monto_total }}" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required step="0.01">
+                <x-input-label for="monto_total" :value="__('Monto Total')" />
+                <x-text-input id="monto_total" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              type="number" name="monto_total" :value="$factura->monto_total" required step="0.01" />
+                <x-input-error :messages="$errors->get('monto_total')" class="mt-2" />
             </div>
 
             <!-- Estado -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Estado</label>
-                <select name="estado" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <option value="pendiente" {{ $factura->estado == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                    <option value="pagado" {{ $factura->estado == 'pagado' ? 'selected' : '' }}>Pagado</option>
-                    <option value="vencido" {{ $factura->estado == 'vencido' ? 'selected' : '' }}>Vencido</option>
+                <x-input-label for="estado" :value="__('Estado')" />
+                <select name="estado" id="estado" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                    <option value="pendiente" {{ $factura->estado == 'pendiente' ? 'selected' : '' }}>{{ __('Pendiente') }}</option>
+                    <option value="pagado" {{ $factura->estado == 'pagado' ? 'selected' : '' }}>{{ __('Pagado') }}</option>
+                    <option value="vencido" {{ $factura->estado == 'vencido' ? 'selected' : '' }}>{{ __('Vencido') }}</option>
                 </select>
+                <x-input-error :messages="$errors->get('estado')" class="mt-2" />
             </div>
 
-            <!-- Fecha de emisión -->
+            <!-- Fechas -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Fecha de Emisión</label>
-                <input type="text" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ $factura->fecha_emision->format('Y-m-d') }}" disabled>
+                <x-input-label for="fecha_emision" :value="__('Fecha de Emisión')" />
+                <x-text-input id="fecha_emision" class="block mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500" type="text" value="{{ $factura->fecha_emision->format('Y-m-d') }}" disabled />
             </div>
 
-            <!-- Fecha de vencimiento -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-1">Fecha de Vencimiento</label>
-                <input type="text" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ $factura->fecha_vencimiento->format('Y-m-d') }}" disabled>
+                <x-input-label for="fecha_vencimiento" :value="__('Fecha de Vencimiento')" />
+                <x-text-input id="fecha_vencimiento" class="block mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500" type="text" value="{{ $factura->fecha_vencimiento->format('Y-m-d') }}" disabled />
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                Actualizar Factura
-            </button>
+            <!-- Botones -->
+            <div class="flex justify-between mt-6">
+                <a href="{{ route('facturas.index') }}" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    {{ __('Cancelar') }}
+                </a>
+                <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    {{ __('Actualizar Factura') }}
+                </x-primary-button>
+            </div>
         </form>
     </div>
 @endsection
