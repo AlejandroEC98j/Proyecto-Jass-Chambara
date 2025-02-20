@@ -42,13 +42,12 @@
                 @endforeach
             </tbody>
         </table>
-
-        <div class="d-flex justify-content-center mt-4">
-            <a href="{{ route('pagos.create', ['factura_id' => $pagos->first()->factura->id ?? 1]) }}" 
-                class="bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700 transition">
-                 Registrar Nuevo Pago
-            </a>
-        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{{ route('pagos.create', ['factura_id' => $pagos->first()->factura->id ?? 1]) }}" 
+            class="bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700 transition">
+             Registrar Nuevo Pago
+        </a>
     </div>
 </div>
 @endsection
