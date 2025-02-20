@@ -14,11 +14,11 @@ class PagoController extends Controller
         return view('pagos.index', compact('pagos'));
     }
 
-    public function create($factura_id)
+    public function create()
     {
-        $factura = Factura::findOrFail($factura_id);
-        return view('pagos.create', compact('factura'));
-    }
+        $facturas = Factura::all(); // Obtener todas las facturas disponibles
+        return view('pagos.create', compact('facturas'));
+    }    
 
     public function store(Request $request)
     {
@@ -30,12 +30,6 @@ class PagoController extends Controller
 
         Pago::create($request->all());
         return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
-    }
-
-    public function edit($id)
-    {
-        $pago = Pago::findOrFail($id);
-        return view('pagos.edit', compact('pago'));
     }
 
     public function update(Request $request, $id)

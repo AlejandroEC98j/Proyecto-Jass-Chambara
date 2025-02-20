@@ -31,7 +31,6 @@
                         <td class="border px-4 py-3">{{ $pago->monto_pagado }}</td>
                         <td class="border px-4 py-3">{{ $pago->fecha_pago }}</td>
                         <td class="border px-4 py-3 text-center">
-                            <a href="{{ route('pagos.edit', $pago->id) }}" class="text-yellow-500 font-semibold hover:underline">Editar</a>
                             <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
