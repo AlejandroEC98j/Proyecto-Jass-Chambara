@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Medidor;
 use App\Models\Factura;
+use App\Models\Pago;
 
 class DashboardController extends Controller
 {
@@ -27,7 +28,8 @@ class DashboardController extends Controller
         $totalClientes = Cliente::count();
         $totalMedidores = Medidor::count();
         $totalFacturas = Factura::count();
+        $totalPagos = Pago::count();
 
-        return view('dashboard', compact('totalClientes', 'totalMedidores', 'totalFacturas'));
+        return view('dashboard', compact('totalClientes', 'totalMedidores', 'totalFacturas', 'totalPagos'));
     }
 }
