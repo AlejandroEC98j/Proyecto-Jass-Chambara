@@ -12,6 +12,7 @@
     @endif
 
     <h1 class="text-2xl font-bold text-center mb-6 text-cyan-600">{{ __('Pagos Registrados') }}</h1>
+     
 
     <div class="overflow-x-auto bg-white shadow-sm rounded-lg">
         <table class="w-full border-collapse border border-gray-300 rounded-lg shadow-md">
@@ -30,12 +31,24 @@
                         <td class="border px-4 py-3">{{ $pago->monto_pagado }}</td>
                         <td class="border px-4 py-3">{{ $pago->fecha_pago }}</td>
                         <td class="border px-4 py-3 text-center">
-                            <a href="{{ route('pagos.create', ['factura_id' => $pago->factura->id]) }}" class="text-blue-500 font-semibold hover:underline">Registrar Pago</a>
+                            <a href="{{ route('pagos.edit', $pago->id) }}" class="text-yellow-500 font-semibold hover:underline">Editar</a>
+                            <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 font-semibold hover:underline" onclick="return confirm('¿Estás seguro de eliminar este pago?')">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ route('pagos.create', ['factura_id' => $pagos->first()->factura->id ?? 1]) }}" 
+                class="bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700 transition">
+                 Registrar Nuevo Pago
+            </a>
+        </div>
     </div>
 </div>
 @endsection

@@ -8,47 +8,53 @@ use Illuminate\Http\Request;
 
 class PagoController extends Controller
 {
-    // Método para mostrar la lista de pagos
     public function index()
     {
-        // Obtener todos los pagos registrados
-        $pagos = Pago::all();
-
-        // Obtener todas las facturas disponibles
-        $facturas = Factura::all();
-
-        // Pasar pagos y facturas a la vista
-        return view('pagos.index', compact('pagos', 'facturas'));
+        $pagos = Pago::with('factura')->get();
+        return view('pagos.index', compact('pagos'));
     }
 
-    // Mostrar el formulario para registrar un pago
     public function create($factura_id)
     {
-        // Obtener la factura asociada al pago
         $factura = Factura::findOrFail($factura_id);
-
-        // Pasar la factura a la vista
         return view('pagos.create', compact('factura'));
     }
 
-    // Almacenar el pago
     public function store(Request $request)
     {
-        // Validar los datos del pago
         $request->validate([
-            'factura_id' => 'required|exists:facturas,id', // Validación de la factura
-            'monto_pagado' => 'required|numeric', // Validación del monto
-            'fecha_pago' => 'required|date', // Validación de la fecha
+            'factura_id' => 'required|exists:facturas,id',
+            'monto_pagado' => 'required|numeric|min:0',
+            'fecha_pago' => 'required|date',
         ]);
 
-        // Crear el pago
-        Pago::create([
-            'factura_id' => $request->factura_id,
-            'monto_pagado' => $request->monto_pagado,
-            'fecha_pago' => $request->fecha_pago,
+        Pago::create($request->all());
+        return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
+    }
+
+    public function edit($id)
+    {
+        $pago = Pago::findOrFail($id);
+        return view('pagos.edit', compact('pago'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'monto_pagado' => 'required|numeric|min:0',
+            'fecha_pago' => 'required|date',
         ]);
 
-        // Redirigir al listado de pagos con mensaje de éxito
-        return redirect()->route('pagos.index')->with('success', 'Pago registrado exitosamente.');
+        $pago = Pago::findOrFail($id);
+        $pago->update($request->all());
+
+        return redirect()->route('pagos.index')->with('success', 'Pago actualizado correctamente.');
+    }
+
+    public function destroy($id)
+    {
+        $pago = Pago::findOrFail($id);
+        $pago->delete();
+        return redirect()->route('pagos.index')->with('success', 'Pago eliminado correctamente.');
     }
 }

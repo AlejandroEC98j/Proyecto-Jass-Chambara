@@ -22,13 +22,23 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::middleware(['auth'])->group(function () {
     // Listar pagos
     Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
-    
+
     // Crear un nuevo pago (con factura_id)
     Route::get('/pagos/create/{factura_id}', [PagoController::class, 'create'])->name('pagos.create');
-    
+
     // Almacenar el pago
     Route::post('/pagos', [PagoController::class, 'store'])->name('pagos.store');
+
+    // Editar un pago
+    Route::get('/pagos/{id}/edit', [PagoController::class, 'edit'])->name('pagos.edit');
+
+    // Actualizar un pago
+    Route::put('/pagos/{id}', [PagoController::class, 'update'])->name('pagos.update');
+
+    // Eliminar un pago
+    Route::delete('/pagos/{id}', [PagoController::class, 'destroy'])->name('pagos.destroy');
 });
+
 
 // Rutas de gestión de entidades
 Route::resources([
