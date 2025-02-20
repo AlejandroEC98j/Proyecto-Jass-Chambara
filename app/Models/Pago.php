@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/Pago.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,13 +12,14 @@ class Pago extends Model
     use HasFactory;
 
     protected $fillable = [
-        'factura_id', 'monto_pagado', 'fecha_pago'
+        'factura_id',
+        'monto_pagado',
+        'fecha_pago',
     ];
 
     // Relación con la factura
     public function factura()
     {
-        return $this->belongsTo(Factura::class);
+        return $this->belongsTo(Factura::class); // Relación con el modelo Factura
     }
 }
-

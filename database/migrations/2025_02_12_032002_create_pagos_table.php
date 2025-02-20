@@ -10,9 +10,9 @@ class CreatePagosTable extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('factura_id')->constrained()->onDelete('cascade');  // Relación con factura
-            $table->decimal('monto_pagado', 10, 2);  // Monto pagado
-            $table->date('fecha_pago');  // Fecha de pago
+            $table->foreignId('factura_id')->constrained('facturas')->onDelete('cascade');
+            $table->decimal('monto_pagado', 10, 2);
+            $table->date('fecha_pago');
             $table->timestamps();
         });
     }

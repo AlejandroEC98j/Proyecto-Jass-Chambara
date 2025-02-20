@@ -1,38 +1,47 @@
-<!-- resources/views/pagos/create.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Registrar Pago')
-
 @section('content')
-    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">Registrar Pago</h1>
+<div class="container">
+    <h1>Registrar Pago</h1>
 
-        <form action="{{ route('pagos.store') }}" method="POST">
-            @csrf
+    <!-- Formulario para registrar el pago -->
+    <form action="{{ route('pagos.store') }}" method="POST">
+        @csrf
 
-            <div class="mb-4">
-                <label for="factura_id" class="block text-gray-700">Selecciona la Factura</label>
-                <select name="factura_id" id="factura_id" class="w-full p-2 border border-gray-300 rounded-md" required>
-                    <option value="">Selecciona una factura</option>
-                    @foreach($facturas as $factura)
-                        <option value="{{ $factura->id }}">{{ $factura->numero_factura }} - {{ $factura->cliente->nombre }}</option>
-                    @endforeach
-                </select>
+        <!-- Campo de monto pagado -->
+        <div class="row mb-3">
+            <label for="monto_pagado" class="col-sm-2 col-form-label">Monto Pagado</label>
+            <div class="col-sm-10">
+                <input type="number" name="monto_pagado" class="form-control" id="monto_pagado" required>
+                <div class="invalid-feedback">
+                    Por favor, ingresa un monto válido.
+                </div>
             </div>
+        </div>
 
-            <div class="mb-4">
-                <label for="monto_pagado" class="block text-gray-700">Monto Pagado</label>
-                <input type="number" name="monto_pagado" id="monto_pagado" class="w-full p-2 border border-gray-300 rounded-md" required>
+        <!-- Campo de fecha de pago -->
+        <div class="row mb-3">
+            <label for="fecha_pago" class="col-sm-2 col-form-label">Fecha de Pago</label>
+            <div class="col-sm-10">
+                <input type="date" name="fecha_pago" class="form-control" id="fecha_pago" required>
+                <div class="invalid-feedback">
+                    Por favor, selecciona una fecha válida.
+                </div>
             </div>
+        </div>
 
-            <div class="mb-4">
-                <label for="fecha_pago" class="block text-gray-700">Fecha de Pago</label>
-                <input type="date" name="fecha_pago" id="fecha_pago" class="w-full p-2 border border-gray-300 rounded-md" required>
+        <!-- Campo de factura_id (oculto) -->
+        <input type="hidden" name="factura_id" value="{{ $factura->id }}">
+
+        <!-- Botón de enviar -->
+        <div class="row mb-3">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Registrar Pago</button>
             </div>
+        </div>
+    </form>
 
-            <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-                Registrar Pago
-            </button>
-        </form>
-    </div>
+    <br>
+    <a href="{{ route('pagos.index') }}" class="btn btn-secondary">Volver al listado de pagos</a>
+</div>
 @endsection

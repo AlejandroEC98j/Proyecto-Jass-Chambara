@@ -20,24 +20,29 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
-    // Perfil de usuario
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
-
-    // Rutas de gestión de entidades
-    Route::resources([
-        'clientes'  => ClienteController::class,
-        'facturas'  => FacturaController::class,
-        'pagos'     => PagoController::class,
-    ]);
+    // Listar pagos
+    Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
+    
+    // Crear un nuevo pago (con factura_id)
+    Route::get('/pagos/create/{factura_id}', [PagoController::class, 'create'])->name('pagos.create');
+    
+    // Almacenar el pago
+    Route::post('/pagos', [PagoController::class, 'store'])->name('pagos.store');
 });
 
+// Rutas de gestión de entidades
+Route::resources([
+    'clientes'  => ClienteController::class,
+    'facturas'  => FacturaController::class,
+]);
+
+// Ruta para medidores
 Route::resource('medidores', MedidorController::class)->parameters([
     'medidores' => 'medidor' // Cambia 'medidore' a 'medidor'
 ]);
+
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
+
 
 // Incluir rutas de autenticación (login, register, etc.)
 require __DIR__.'/auth.php';

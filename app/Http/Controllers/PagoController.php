@@ -8,31 +8,44 @@ use Illuminate\Http\Request;
 
 class PagoController extends Controller
 {
-    // Mostrar el formulario para crear un nuevo pago
-    public function create($factura_id)
+    // Método para mostrar la lista de pagos
+    public function index()
     {
-        $factura = Factura::findOrFail($factura_id); // Encuentra la factura asociada
-        return view('pagos.create', compact('factura')); // Pasa la factura a la vista
+        // Obtener todos los pagos registrados
+        $pagos = Pago::all();
+
+        // Pasar los pagos a la vista
+        return view('pagos.index', compact('pagos'));
     }
 
-    // Almacenar el pago en la base de datos
+    // Mostrar el formulario para registrar un pago
+    public function create($factura_id)
+    {
+        // Obtener la factura asociada al pago
+        $factura = Factura::findOrFail($factura_id);
+
+        // Pasar la factura a la vista
+        return view('pagos.create', compact('factura'));
+    }
+
+    // Almacenar el pago
     public function store(Request $request)
     {
-        // Validación de los campos del formulario
+        // Validar los datos del pago
         $request->validate([
-            'factura_id' => 'required|exists:facturas,id', // Verifica que la factura exista
-            'monto_pagado' => 'required|numeric', // Verifica que el monto sea numérico
-            'fecha_pago' => 'required|date', // Verifica que la fecha sea válida
+            'factura_id' => 'required|exists:facturas,id', // Validación de la factura
+            'monto_pagado' => 'required|numeric', // Validación del monto
+            'fecha_pago' => 'required|date', // Validación de la fecha
         ]);
 
-        // Crear un nuevo pago en la base de datos
+        // Crear el pago
         Pago::create([
             'factura_id' => $request->factura_id,
             'monto_pagado' => $request->monto_pagado,
             'fecha_pago' => $request->fecha_pago,
         ]);
 
-        // Redirige a la lista de pagos o a la vista de facturas con un mensaje de éxito
-        return redirect()->route('facturas.index')->with('success', 'Pago registrado correctamente.');
+        // Redirigir al listado de pagos con mensaje de éxito
+        return redirect()->route('pagos.index')->with('success', 'Pago registrado exitosamente.');
     }
 }
