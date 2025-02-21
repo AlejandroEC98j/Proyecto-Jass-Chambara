@@ -29,10 +29,19 @@
                             <td class="border px-4 py-3">{{ $pago->monto_pagado }}</td>
                             <td class="border px-4 py-3">{{ $pago->fecha_pago }}</td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
+                                {{-- Descargar comprobante --}}
+                                <a href="{{ route('pagos.pdf', $pago->id) }}"
+                                   class="text-blue-600 font-semibold hover:underline">
+                                    📄 Descargar Comprobante
+                                </a>
+
+                                {{-- Eliminar pago --}}
                                 <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 font-semibold hover:underline" onclick="return confirm('¿Estás seguro de eliminar este pago?')">
+                                    <button type="submit"
+                                            class="text-red-600 font-semibold hover:underline"
+                                            onclick="return confirm('¿Estás seguro de eliminar este pago?')">
                                         {{ __('Eliminar') }}
                                     </button>
                                 </form>
@@ -48,17 +57,10 @@
         </div>
 
         <div class="mt-8 flex justify-center">
-            <a href="{{ route('pagos.create', ['factura_id' => $pagos->first()->factura->id ?? 1]) }}" 
-                class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+            <a href="{{ route('pagos.create', ['factura_id' => optional(optional($pagos->first())->factura)->id ?? 1]) }}"
+               class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
                 {{ __('Registrar Nuevo Pago') }}
             </a>
         </div>
-
-        <td class="border px-4 py-3 text-center">
-            <a href="{{ route('pagos.pdf', $pago->id) }}" class="text-blue-600 font-semibold hover:underline">
-                📄 Descargar Comprobante
-            </a>
-        </td>
-        
     </div>
 @endsection
