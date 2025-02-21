@@ -31,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Editar un pago
     Route::get('/pagos/{id}/edit', [PagoController::class, 'edit'])->name('pagos.edit');
+   
+    Route::get('/pagos/{id}/pdf', [PagoController::class, 'generarPDF'])->name('pagos.pdf');
 
     // Actualizar un pago
     Route::put('/pagos/{id}', [PagoController::class, 'update'])->name('pagos.update');

@@ -4,33 +4,41 @@
 
 @section('content')
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-6">
-        <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">{{ __('Editar Factura') }}</h2>
+        <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">✏️ {{ __('Editar Factura') }}</h2>
 
         <form action="{{ route('facturas.update', $factura->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
-            
-            @foreach ([
-                'cliente_id' => 'Cliente',
-                'numero_factura' => 'Número de Factura',
-                'monto_total' => 'Monto Total'
-            ] as $field => $label)
-                <div>
-                    <x-input-label for="{{ $field }}" :value="__($label)" />
-                    @if ($field === 'cliente_id')
-                        <select id="{{ $field }}" name="{{ $field }}" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500" required>
-                            @foreach($clientes as $cliente)
-                                <option value="{{ $cliente->id }}" {{ $cliente->id == $factura->$field ? 'selected' : '' }}>{{ $cliente->nombre }}</option>
-                            @endforeach
-                        </select>
-                    @else
-                        <x-text-input id="{{ $field }}" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500"
-                                      type="{{ $field == 'monto_total' ? 'number' : 'text' }}" step="0.01" name="{{ $field }}" value="{{ old($field, $factura->$field) }}" required />
-                    @endif
-                    <x-input-error :messages="$errors->get($field)" class="mt-2" />
-                </div>
-            @endforeach
-            
+
+            <!-- Cliente -->
+            <div>
+                <x-input-label for="cliente_id" :value="__('Cliente')" />
+                <select id="cliente_id" name="cliente_id" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500" required>
+                    @foreach($clientes as $cliente)
+                        <option value="{{ $cliente->id }}" {{ $factura->cliente_id == $cliente->id ? 'selected' : '' }}>
+                            {{ $cliente->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('cliente_id')" class="mt-2" />
+            </div>
+
+            <!-- Número de Factura -->
+            <div>
+                <x-input-label for="numero_factura" :value="__('Número de Factura')" />
+                <x-text-input id="numero_factura" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500"
+                              type="text" name="numero_factura" value="{{ old('numero_factura', $factura->numero_factura) }}" required />
+                <x-input-error :messages="$errors->get('numero_factura')" class="mt-2" />
+            </div>
+
+            <!-- Monto Total -->
+            <div>
+                <x-input-label for="monto_total" :value="__('Monto Total')" />
+                <x-text-input id="monto_total" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500"
+                              type="number" step="0.01" name="monto_total" value="{{ old('monto_total', $factura->monto_total) }}" required />
+                <x-input-error :messages="$errors->get('monto_total')" class="mt-2" />
+            </div>
+
             <!-- Estado -->
             <div>
                 <x-input-label for="estado" :value="__('Estado')" />
@@ -41,25 +49,14 @@
                 </select>
                 <x-input-error :messages="$errors->get('estado')" class="mt-2" />
             </div>
-            
-            <!-- Fechas -->
-            @foreach ([
-                'fecha_emision' => 'Fecha de Emisión',
-                'fecha_vencimiento' => 'Fecha de Vencimiento'
-            ] as $field => $label)
-                <div>
-                    <x-input-label for="{{ $field }}" :value="__($label)" />
-                    <x-text-input id="{{ $field }}" class="block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500" type="text" value="{{ $factura->$field->format('Y-m-d') }}" disabled />
-                </div>
-            @endforeach
 
             <!-- Botones -->
-            <div class="flex justify-between">
+            <div class="flex justify-between mt-6">
                 <a href="{{ route('facturas.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:ring-2 focus:ring-gray-400">
-                    {{ __('Cancelar') }}
+                    ⬅️ {{ __('Cancelar') }}
                 </a>
                 <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500">
-                    {{ __('Actualizar Factura') }}
+                    💾 {{ __('Actualizar Factura') }}
                 </x-primary-button>
             </div>
         </form>

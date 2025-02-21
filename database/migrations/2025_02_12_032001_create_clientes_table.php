@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
+            $table->string('dni', 8)->unique();
             $table->string('nombre');
             $table->string('direccion');
             $table->string('telefono')->nullable();

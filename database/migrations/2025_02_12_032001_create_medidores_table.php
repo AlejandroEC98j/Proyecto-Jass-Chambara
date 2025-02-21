@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onDelete('set null'); 
             $table->string('numero_serie')->unique();
-            $table->decimal('lectura_actual', 8, 2);
+            $table->decimal('monto_a_pagar', 8, 2);
             $table->string('direccion');
             $table->enum('estado', ['Activo', 'Inactivo'])->default('Activo'); // Agregar estado
             $table->timestamps();

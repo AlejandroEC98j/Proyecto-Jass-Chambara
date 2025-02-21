@@ -53,5 +53,12 @@
                 {{ __('Registrar Nuevo Pago') }}
             </a>
         </div>
+
+        <td class="border px-4 py-3 text-center">
+            <a href="{{ route('pagos.pdf', $pago->id) }}" class="text-blue-600 font-semibold hover:underline">
+                📄 Descargar Comprobante
+            </a>
+        </td>
+        
     </div>
 @endsection

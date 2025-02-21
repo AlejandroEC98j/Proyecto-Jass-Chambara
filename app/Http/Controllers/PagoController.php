@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pago;
 use App\Models\Factura;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf; // Importar DomPDF
+
 
 class PagoController extends Controller
 {
@@ -14,11 +16,12 @@ class PagoController extends Controller
         return view('pagos.index', compact('pagos'));
     }
 
-    public function create()
+    public function create($factura_id)
     {
-        $facturas = Factura::all(); // Obtener todas las facturas disponibles
-        return view('pagos.create', compact('facturas'));
-    }    
+        $factura = Factura::findOrFail($factura_id); // Obtiene la factura específica
+        return view('pagos.create', compact('factura'));
+    }
+    
 
     public function store(Request $request)
     {
@@ -27,10 +30,18 @@ class PagoController extends Controller
             'monto_pagado' => 'required|numeric|min:0',
             'fecha_pago' => 'required|date',
         ]);
-
-        Pago::create($request->all());
+    
+        // Registrar el pago
+        $pago = Pago::create($request->all());
+    
+        // Marcar la factura como pagada
+        $factura = Factura::findOrFail($request->factura_id);
+        $factura->estado = 'pagado';
+        $factura->save();
+    
         return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
     }
+    
 
     public function update(Request $request, $id)
     {
@@ -50,5 +61,14 @@ class PagoController extends Controller
         $pago = Pago::findOrFail($id);
         $pago->delete();
         return redirect()->route('pagos.index')->with('success', 'Pago eliminado correctamente.');
+    }
+
+    public function generarPDF($id)
+    {
+        $pago = Pago::with('factura.cliente')->findOrFail($id);
+
+        $pdf = Pdf::loadView('pagos.pdf', compact('pago'));
+
+        return $pdf->download('comprobante_pago.pdf');
     }
 }

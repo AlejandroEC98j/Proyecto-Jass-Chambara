@@ -9,16 +9,20 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    protected $table = 'clientes'; // Esto es opcional si Laravel ya usa este nombre
-    protected $fillable = ['nombre', 'direccion', 'telefono', 'correo', 'tipo_contrato'];
+    protected $table = 'clientes';
 
+    protected $fillable = [
+        'dni',
+        'nombre',
+        'direccion',
+        'telefono',
+        'correo',
+        'tipo_contrato'
+    ];
+
+    // Relación: Un cliente puede tener un medidor
     public function medidor()
     {
-        return $this->hasOne(Medidor::class, 'cliente_id');
-    }
-
-    public function facturas()
-    {
-        return $this->hasMany(Factura::class, 'cliente_id');
+        return $this->hasOne(Medidor::class);
     }
 }

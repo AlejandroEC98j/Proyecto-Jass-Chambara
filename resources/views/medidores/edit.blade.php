@@ -3,7 +3,6 @@
 @section('title', 'Editar Medidor')
 
 @section('content')
-    <!-- Contenedor principal -->
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">{{ __('Editar Medidor') }}</h2>
 
@@ -13,7 +12,7 @@
 
             @foreach ([
                 'numero_serie' => 'Número de Serie',
-                'lectura_actual' => 'Lectura Actual',
+                'monto_a_pagar' => 'Monto a Pagar 💰',
                 'direccion' => 'Dirección'
             ] as $field => $label)
                 <div>
@@ -24,43 +23,28 @@
                 </div>
             @endforeach
 
-            <!-- Cliente -->
-            <div>
-                <x-input-label for="cliente_id" :value="__('Cliente')" />
-                <select id="cliente_id" name="cliente_id" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500" required>
-                    <option value="">Seleccione un cliente</option>
-                    @foreach ($clientes as $cliente)
-                        <option value="{{ $cliente->id }}" {{ old('cliente_id', $medidor->cliente_id) == $cliente->id ? 'selected' : '' }}>
-                            {{ $cliente->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-                <x-input-error :messages="$errors->get('cliente_id')" class="mt-2" />
-            </div>
-
             <!-- Estado -->
             <div>
                 <x-input-label for="estado" :value="__('Estado')" />
                 <select id="estado" name="estado" class="block w-full p-3 border border-cyan-300 rounded-md focus:ring-2 focus:ring-cyan-500" required>
-                    <option value="Activo" {{ old('estado', $medidor->estado) == 'Activo' ? 'selected' : '' }}>{{ __('Activo') }}</option>
-                    <option value="Inactivo" {{ old('estado', $medidor->estado) == 'Inactivo' ? 'selected' : '' }}>{{ __('Inactivo') }}</option>
+                    <option value="Activo" {{ old('estado', $medidor->estado) == 'Activo' ? 'selected' : '' }}>
+                        {{ __('Activo') }}
+                    </option>
+                    <option value="Inactivo" {{ old('estado', $medidor->estado) == 'Inactivo' ? 'selected' : '' }}>
+                        {{ __('Inactivo') }}
+                    </option>
                 </select>
                 <x-input-error :messages="$errors->get('estado')" class="mt-2" />
             </div>
 
-            <!-- Botones de acción -->
-            <div class="flex justify-between">
-                <!-- Botón de Cancelar -->
-                <a href="{{ route('medidores.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:ring-2 focus:ring-gray-400">
-                    {{ __('Cancelar') }}
+            <div class="flex justify-between mt-6">
+                <a href="{{ route('medidores.index') }}" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:ring-2 focus:ring-gray-500">
+                    ⬅️ {{ __('Cancelar') }}
                 </a>
-
-                <!-- Botón de Guardar -->
                 <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500">
-                    {{ __('Actualizar Medidor') }}
+                    💾 {{ __('Actualizar Medidor') }}
                 </x-primary-button>
             </div>
         </form>
     </div>
-
-    @endsection
+@endsection

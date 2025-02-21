@@ -27,11 +27,12 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'dni' => 'required|string|size:8|unique:clientes,dni', // Validación del DNI exacto de 8 dígitos
             'nombre' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
             'telefono' => 'nullable|string|max:15',
             'correo' => 'nullable|email|max:255',
-            'tipo_contrato' => 'required|string|max:50'
+            'tipo_contrato' => 'required|in:con medidor,sin medidor'
         ]);
 
         try {
@@ -51,11 +52,12 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $request->validate([
+            'dni' => 'required|string|size:8|unique:clientes,dni,' . $cliente->id,
             'nombre' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
             'telefono' => 'nullable|string|max:15',
             'correo' => 'nullable|email|max:255',
-            'tipo_contrato' => 'required|string|max:50'
+            'tipo_contrato' => 'required|in:con medidor,sin medidor'
         ]);
 
         try {

@@ -10,10 +10,18 @@ class Medidor extends Model
     use HasFactory;
 
     protected $table = 'medidores';
-    protected $fillable = ['numero_serie', 'cliente_id', 'lectura_actual', 'estado', 'direccion'];
 
+    protected $fillable = [
+        'cliente_id',
+        'numero_serie',
+        'monto_a_pagar',
+        'direccion',
+        'estado'
+    ];
+
+    // Relación: Un medidor pertenece a un cliente
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'cliente_id');
+        return $this->belongsTo(Cliente::class);
     }
 }

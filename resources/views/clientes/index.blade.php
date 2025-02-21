@@ -17,6 +17,7 @@
                 <thead class="bg-cyan-100 text-gray-700">
                     <tr>
                         <th class="border border-gray-300 px-4 py-3">ID</th>
+                        <th class="border border-gray-300 px-4 py-3">DNI</th>
                         <th class="border border-gray-300 px-4 py-3">Nombre</th>
                         <th class="border border-gray-300 px-4 py-3">Dirección</th>
                         <th class="border border-gray-300 px-4 py-3">Teléfono</th>
@@ -29,6 +30,7 @@
                     @forelse($clientes as $cliente)
                         <tr class="border border-gray-300 hover:bg-cyan-50 transition">
                             <td class="border px-4 py-3 text-center">{{ $cliente->id }}</td>
+                            <td class="border px-4 py-3 text-center">{{ $cliente->dni }}</td>
                             <td class="border px-4 py-3">{{ $cliente->nombre }}</td>
                             <td class="border px-4 py-3">{{ $cliente->direccion }}</td>
                             <td class="border px-4 py-3 text-center">{{ $cliente->telefono }}</td>
@@ -36,20 +38,20 @@
                             <td class="border px-4 py-3 text-center">{{ $cliente->tipo_contrato }}</td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
                                 <a href="{{ route('clientes.edit', $cliente->id) }}" class="text-cyan-600 font-semibold hover:underline">
-                                    {{ __('Editar') }}
+                                    ✏️ {{ __('Editar') }}
                                 </a>
-                                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST">
+                                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este cliente?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 font-semibold hover:underline">
-                                        {{ __('Eliminar') }}
+                                        🗑️ {{ __('Eliminar') }}
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="7" class="py-4 text-gray-500">{{ __('No hay clientes registrados') }}</td>
+                            <td colspan="8" class="py-4 text-gray-500">{{ __('No hay clientes registrados') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -58,7 +60,7 @@
 
         <div class="mt-8 flex justify-center">
             <a href="{{ route('clientes.create') }}" class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                {{ __('Agregar Cliente') }}
+                ➕ {{ __('Agregar Cliente') }}
             </a>
         </div>
     </div>

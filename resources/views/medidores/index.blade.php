@@ -19,7 +19,7 @@
                         <th class="border border-gray-300 px-4 py-3">ID</th>
                         <th class="border border-gray-300 px-4 py-3">Número de Serie</th>
                         <th class="border border-gray-300 px-4 py-3">Cliente</th>
-                        <th class="border border-gray-300 px-4 py-3">Lectura Actual</th>
+                        <th class="border border-gray-300 px-4 py-3">Monto a Pagar 💰</th>
                         <th class="border border-gray-300 px-4 py-3">Dirección</th>
                         <th class="border border-gray-300 px-4 py-3">Estado</th>
                         <th class="border border-gray-300 px-4 py-3 text-center">Acciones</th>
@@ -31,7 +31,7 @@
                             <td class="border px-4 py-3 text-center">{{ $medidor->id }}</td>
                             <td class="border px-4 py-3">{{ $medidor->numero_serie }}</td>
                             <td class="border px-4 py-3">{{ $medidor->cliente->nombre }}</td>
-                            <td class="border px-4 py-3 text-center">{{ $medidor->lectura_actual }}</td>
+                            <td class="border px-4 py-3 text-center font-bold text-green-600">💰 S/. {{ number_format($medidor->monto_a_pagar, 2) }}</td>
                             <td class="border px-4 py-3">{{ $medidor->direccion }}</td>
                             <td class="border px-4 py-3 text-center">
                                 <span class="px-2 py-1 rounded-md text-white 
@@ -43,13 +43,13 @@
                             </td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
                                 <a href="{{ route('medidores.edit', $medidor->id) }}" class="text-cyan-600 font-semibold hover:underline">
-                                    {{ __('Editar') }}
+                                    ✏️ {{ __('Editar') }}
                                 </a>
                                 <form action="{{ route('medidores.destroy', $medidor->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 font-semibold hover:underline">
-                                        {{ __('Eliminar') }}
+                                        🗑️ {{ __('Eliminar') }}
                                     </button>
                                 </form>
                             </td>
@@ -65,7 +65,7 @@
 
         <div class="mt-8 flex justify-center">
             <a href="{{ route('medidores.create') }}" class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                {{ __('Agregar Medidor') }}
+                ➕ {{ __('Agregar Medidor') }}
             </a>
         </div>
     </div>
