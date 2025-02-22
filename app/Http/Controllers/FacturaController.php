@@ -80,6 +80,16 @@ class FacturaController extends Controller
     {
         // Obtener todas las facturas
         $facturas = Factura::all();
+
+        // Revisar si alguna factura está vencida y actualizar su estado
+        foreach ($facturas as $factura) {
+            // Verificar si la factura está vencida y actualizar el estado
+            if ($factura->fecha_vencimiento < Carbon::now() && $factura->estado !== 'vencido') {
+                $factura->estado = 'vencido';
+                $factura->save();
+            }
+        }
+
         return view('facturas.index', compact('facturas'));
     }
 }

@@ -40,7 +40,13 @@
                                 </span>
                             </td>
                             <td class="border px-4 py-3 text-center">{{ \Carbon\Carbon::parse($factura->fecha_emision)->format('d/m/Y') }}</td>
-                            <td class="border px-4 py-3 text-center">{{ \Carbon\Carbon::parse($factura->fecha_vencimiento)->format('d/m/Y') }}</td>
+                            <td class="border px-4 py-3 text-center">
+                                @if($factura->estado !== 'vencido')
+                                    {{ \Carbon\Carbon::parse($factura->fecha_vencimiento)->format('d/m/Y') }}
+                                @else
+                                    <span class="text-red-500">Vencida</span>
+                                @endif
+                            </td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
                                 <a href="{{ route('facturas.edit', $factura->id) }}" class="text-cyan-600 font-semibold hover:underline">
                                     ✏️ {{ __('Editar') }}

@@ -17,8 +17,10 @@
                 <thead class="bg-cyan-100 text-gray-700">
                     <tr>
                         <th class="border border-gray-300 px-4 py-3">Factura</th>
+                        <th class="border border-gray-300 px-4 py-3">Cliente</th>
                         <th class="border border-gray-300 px-4 py-3">Monto Pagado</th>
                         <th class="border border-gray-300 px-4 py-3">Fecha de Pago</th>
+                        <th class="border border-gray-300 px-4 py-3">Estado</th>
                         <th class="border border-gray-300 px-4 py-3 text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -26,8 +28,17 @@
                     @forelse($pagos as $pago)
                         <tr class="border border-gray-300 hover:bg-cyan-50 transition">
                             <td class="border px-4 py-3 text-center">{{ $pago->factura->numero_factura }}</td>
-                            <td class="border px-4 py-3">{{ $pago->monto_pagado }}</td>
-                            <td class="border px-4 py-3">{{ $pago->fecha_pago }}</td>
+                            <td class="border px-4 py-3">{{ $pago->factura->cliente->nombre }}</td>
+                            <td class="border px-4 py-3 text-center">{{ number_format($pago->monto_pagado, 2) }}</td>
+                            <td class="border px-4 py-3 text-center">{{ \Carbon\Carbon::parse($pago->fecha_pago)->format('d/m/Y') }}</td>
+                            <td class="border px-4 py-3 text-center">
+                                <span class="px-2 py-1 rounded text-white 
+                                    {{ $pago->factura->estado == 'pendiente' ? 'bg-blue-500' : '' }}
+                                    {{ $pago->factura->estado == 'vencido' ? 'bg-red-500' : '' }}
+                                    {{ $pago->factura->estado == 'pagado' ? 'bg-green-500' : '' }}">
+                                    {{ ucfirst($pago->factura->estado) }}
+                                </span>
+                            </td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
                                 {{-- Descargar comprobante --}}
                                 <a href="{{ route('pagos.pdf', $pago->id) }}"
@@ -42,25 +53,19 @@
                                     <button type="submit"
                                             class="text-red-600 font-semibold hover:underline"
                                             onclick="return confirm('¿Estás seguro de eliminar este pago?')">
-                                        {{ __('Eliminar') }}
+                                        🗑️ {{ __('Eliminar') }}
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4" class="py-4 text-gray-500">{{ __('No hay pagos registrados') }}</td>
+                            <td colspan="6" class="py-4 text-gray-500">{{ __('No hay pagos registrados') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
-        <div class="mt-8 flex justify-center">
-            <a href="{{ route('pagos.create', ['factura_id' => optional(optional($pagos->first())->factura)->id ?? 1]) }}"
-               class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                {{ __('Registrar Nuevo Pago') }}
-            </a>
-        </div>
     </div>
 @endsection

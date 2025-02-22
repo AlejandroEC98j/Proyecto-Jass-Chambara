@@ -25,11 +25,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $totalClientes = Cliente::count();
-        $totalMedidores = Medidor::count();
-        $totalFacturas = Factura::count();
-        $totalPagos = Pago::count();
+        // Obtener todas las facturas vencidas
+        $facturasVencidas = Factura::where('estado', 'vencido')->get();
 
-        return view('dashboard', compact('totalClientes', 'totalMedidores', 'totalFacturas', 'totalPagos'));
+        // Obtener los pagos por mes (esto es solo un ejemplo, ajusta según tu lógica)
+        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril'];  // Ejemplo de meses
+        $pagosPorMes = [100, 150, 120, 80];  // Ejemplo de pagos por mes
+
+        return view('dashboard', [
+            'totalClientes' => Cliente::count(),
+            'totalMedidores' => Medidor::count(),
+            'totalFacturas' => Factura::count(),
+            'totalPagos' => Pago::count(),
+            'facturasVencidas' => $facturasVencidas, // Se pasa la variable a la vista
+            'meses' => $meses,  // Pasa los meses a la vista
+            'pagosPorMes' => $pagosPorMes,  // Pasa los pagos por mes a la vista
+        ]);
     }
 }
