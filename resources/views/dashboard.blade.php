@@ -5,7 +5,9 @@
 @section('content')
     <div class="max-w-7xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <!-- Título Principal -->
-        <h1 class="text-3xl font-bold text-center mb-6 text-cyan-600">{{ __('Junta Administradora de Servicios de Saneamiento') }}</h1>
+        <h1 class="text-3xl font-bold text-center mb-6 text-cyan-600">
+            {{ __('Junta Administradora de Servicios de Saneamiento') }}
+        </h1>
 
         <!-- Filtros -->
         <div class="flex flex-wrap justify-center space-x-4 mb-6">
@@ -41,14 +43,44 @@
 
         <!-- Gráficos -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div class="bg-white p-4 rounded-lg shadow-md">
+            <div class="bg-white p-4 rounded-lg shadow-md h-[400px] flex flex-col justify-center items-center">
                 <h2 class="text-center text-lg font-semibold text-gray-700 mb-3">Consumo Promedio</h2>
-                <canvas id="consumptionChart"></canvas>
+                <div class="w-full h-[300px]">
+                    <canvas id="consumptionChart"></canvas>
+                </div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-md">
+            <div class="bg-white p-4 rounded-lg shadow-md h-[400px] flex flex-col justify-center items-center">
                 <h2 class="text-center text-lg font-semibold text-gray-700 mb-3">Estado de Pagos</h2>
-                <canvas id="paymentsChart"></canvas>
+                <div class="w-full h-[300px]">
+                    <canvas id="paymentsChart"></canvas>
+                </div>
             </div>
+        </div>
+
+        <!-- Botones de Navegación -->
+        <div class="mt-8 text-center space-x-4">
+            <a href="{{ route('clientes.index') }}" class="bg-cyan-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transform hover:scale-105 transition-all">
+                <i class="fas fa-users"></i> {{ __('Gestionar Clientes') }}
+            </a>
+            <a href="{{ route('medidores.index') }}" class="bg-green-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transform hover:scale-105 transition-all">
+                <i class="fas fa-tachometer-alt"></i> {{ __('Gestionar Medidores') }}
+            </a>
+            <a href="{{ route('facturas.index') }}" class="bg-red-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transform hover:scale-105 transition-all">
+                <i class="fas fa-file-invoice-dollar"></i> {{ __('Gestionar Facturas') }}
+            </a>
+            <a href="{{ route('pagos.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105 transition-all">
+                <i class="fas fa-credit-card"></i> {{ __('Gestionar Pagos') }}
+            </a>
+        </div>
+
+        <!-- Información Adicional o Frase -->
+        <div class="mt-12 text-center text-gray-600">
+            <p class="text-lg font-semibold text-cyan-600">
+                {{ __('Cuidemos el agua. ¡Cada gota cuenta!') }}
+            </p>
+            <p class="mt-4 text-md text-gray-500">
+                {{ __('JASS de Uñas - Huancayo, Perú. Proveedor de agua y servicios a la comunidad.') }}
+            </p>
         </div>
     </div>
 
