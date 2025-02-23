@@ -30,10 +30,9 @@ class MedidorController extends Controller
     {
         $request->validate([
             'cliente_id' => 'nullable|exists:clientes,id',
-            'numero_serie' => 'required|string|max:50|unique:medidores,numero_serie',
-            'monto_a_pagar' => 'required|numeric|min:0', // Cambio de "lectura_actual" a "monto_a_pagar"
-            'estado' => 'required|in:Activo,Inactivo',
-            'direccion' => 'required|string|max:255',
+            'numero_serie' => 'required|unique:medidores,numero_serie',
+            'direccion' => 'required',
+            'estado' => 'required|in:Activo,Inactivo,Mantenimiento,Dañado'
         ]);
 
         try {
@@ -55,10 +54,9 @@ class MedidorController extends Controller
     {
         $request->validate([
             'cliente_id' => 'nullable|exists:clientes,id',
-            'numero_serie' => 'required|string|max:50|unique:medidores,numero_serie,' . $medidor->id,
-            'monto_a_pagar' => 'required|numeric|min:0', // Cambio de "lectura_actual" a "monto_a_pagar"
-            'estado' => 'required|in:Activo,Inactivo',
-            'direccion' => 'required|string|max:255',
+            'numero_serie' => 'required|unique:medidores,numero_serie',
+            'direccion' => 'required',
+            'estado' => 'required|in:Activo,Inactivo,Mantenimiento,Dañado'
         ]);
 
         try {
