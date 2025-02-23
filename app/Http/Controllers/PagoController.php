@@ -16,10 +16,10 @@ class PagoController extends Controller
         return view('pagos.index', compact('pagos'));
     }
 
-    public function create()
+    public function create($factura_id)
     {
-        $facturas = Factura::all(); // Obtener todas las facturas disponibles
-        return view('pagos.create', compact('facturas'));
+        $factura = Factura::findOrFail($factura_id);// Obtener la factura específica
+        return view('pagos.create', compact('factura'));
     }
     
     public function store(Request $request)

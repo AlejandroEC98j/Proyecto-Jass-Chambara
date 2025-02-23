@@ -64,13 +64,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
-            <div class="flex justify-end mb-4">
-                <a href="{{ route('pagos.create', ['factura_id' => 1]) }}" 
-                   class="bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500">
-                    ➕ {{ __('Registrar Nuevo Pago') }}
-                </a>
-            </div>            
+            </table>         
         </div>
 
     </div>
