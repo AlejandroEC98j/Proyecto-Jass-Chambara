@@ -17,28 +17,28 @@ class FacturaController extends Controller
         return view('facturas.create', compact('clientes'));
     }
 
-    // Método para almacenar una nueva factura
     public function store(Request $request)
     {
-        // Validación de los campos del formulario
         $validated = $request->validate([
-            'cliente_id' => 'required|exists:clientes,id', // Validar que el cliente exista
-            'numero_factura' => 'required|unique:facturas,numero_factura', // Validar que el número de factura sea único
-            'monto_total' => 'required|numeric', // Validar que el monto sea numérico
-            'estado' => 'required|in:pendiente,pagado,vencido', // Validar que el estado sea uno de los permitidos
+            'cliente_id' => 'required|exists:clientes,id',
+            'numero_factura' => 'required|unique:facturas,numero_factura',
+            'monto_total' => 'required|numeric',
+            'estado' => 'required|in:pendiente,pagado,vencido',
         ]);
-
-        // Agregar la fecha de emisión y la fecha de vencimiento automáticamente
-        $validated['fecha_emision'] = Carbon::now(); // Fecha de emisión es la actual
-        $validated['fecha_vencimiento'] = Carbon::now()->addDays(45); // Fecha de vencimiento es 45 días después
-
-        // Crear la factura en la base de datos
-        Factura::create($validated);
-
-        // Redirigir a la página de listado de facturas con un mensaje de éxito
+    
+        $validated['fecha_emision'] = now();
+        $validated['fecha_vencimiento'] = now()->addDays(45);
+    
+        // 🔹 Aquí creamos la factura antes del `if`
+        $factura = Factura::create($validated);
+    
+        if ($request->expectsJson()) {
+            return response()->json(['factura' => $factura], 201);
+        }
+    
         return redirect()->route('facturas.index')->with('success', 'Factura creada con éxito');
     }
-
+    
     // Método para editar una factura existente
     public function edit(Factura $factura)
     {
@@ -68,10 +68,12 @@ class FacturaController extends Controller
     // Método para eliminar una factura
     public function destroy(Factura $factura)
     {
-        // Eliminar la factura
         $factura->delete();
 
-        // Redirigir con mensaje de éxito
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Factura eliminada con éxito'], 200);
+        }
+
         return redirect()->route('facturas.index')->with('success', 'Factura eliminada con éxito');
     }
 

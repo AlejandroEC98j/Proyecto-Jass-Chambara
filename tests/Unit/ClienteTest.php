@@ -2,28 +2,33 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Cliente;
+use App\Models\Medidor;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ClienteTest extends TestCase
 {
-    // Utiliza el trait RefreshDatabase para reiniciar la base de datos después de cada prueba
-    use RefreshDatabase;
+    use RefreshDatabase; // Limpia la base de datos después de cada prueba
 
-    /**
-     * @test
-     * Esta prueba verifica que se puede crear un cliente y que los datos se almacenan correctamente en la base de datos.
-     */
-    public function puede_crear_un_cliente()
+    /** @test */
+    public function se_puede_crear_un_cliente()
     {
-        // Crea un nuevo cliente utilizando una fábrica
-        $cliente = Cliente::factory()->create();
-
-        // Verifica que la base de datos contiene un registro con los datos del cliente creado
-        $this->assertDatabaseHas('clientes', [
-            'id' => $cliente->id,
-            'nombre' => $cliente->nombre,
+        $cliente = Cliente::factory()->create([
+            'dni' => '12345678',
+            'nombre' => 'Juan Pérez',
+            'direccion' => 'Av. Siempre Viva 123',
+            'tipo_contrato' => 'con medidor'
         ]);
+
+        $this->assertDatabaseHas('clientes', ['dni' => '12345678']);
+    }
+
+    /** @test */
+    public function dni_nombre_direccion_y_tipo_contrato_son_obligatorios()
+    {
+        $this->expectException(\Illuminate\Database\QueryException::class);
+
+        Cliente::create([]); // Intenta crear un cliente sin datos
     }
 }

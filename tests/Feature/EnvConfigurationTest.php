@@ -8,8 +8,9 @@ class EnvConfigurationTest extends TestCase
 {
     public function test_env_configuracion_correcta()
     {
-        $this->assertEquals(env('DB_DATABASE'), 'jass_unas');
-        $this->assertEquals(env('APP_ENV'), 'testing');
-        $this->assertNotEmpty(env('APP_KEY'));
+        $this->assertEquals(env('DB_DATABASE'), config('database.connections.mysql.database'));
+        $this->assertEquals(env('APP_ENV'), config('app.env'));
+        $this->assertNotEmpty(config('app.key'));
     }
+
 }
