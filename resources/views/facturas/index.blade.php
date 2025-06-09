@@ -4,7 +4,13 @@
 
 @section('content')
     <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center mb-6 text-cyan-600">{{ __('Facturas Registradas') }}</h2>
+        <!-- Encabezado con botón de volver -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-cyan-600">{{ __('Facturas Registradas') }}</h2>
+            <a href="{{ route('dashboard') }}" class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                ← Volver al Dashboard
+            </a>
+        </div>
 
         @if(session('success'))
             <div class="bg-green-500 text-white p-3 rounded-md mb-4 text-center">
@@ -51,7 +57,7 @@
                                 <a href="{{ route('facturas.edit', $factura->id) }}" class="text-cyan-600 font-semibold hover:underline">
                                     ✏️ {{ __('Editar') }}
                                 </a>
-                                <form action="{{ route('facturas.destroy', $factura->id) }}" method="POST">
+                                <form action="{{ route('facturas.destroy', $factura->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar esta factura?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 font-semibold hover:underline">
@@ -74,9 +80,10 @@
             </table>
         </div>
 
+        <!-- Botón para agregar nueva factura -->
         <div class="mt-8 flex justify-center">
             <a href="{{ route('facturas.create') }}" class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <i class="fas fa-plus-circle"></i> ➕ {{ __('Agregar Factura') }}
+                ➕ {{ __('Agregar Factura') }}
             </a>
         </div>
     </div>

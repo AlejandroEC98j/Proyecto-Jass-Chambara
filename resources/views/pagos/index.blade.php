@@ -4,7 +4,13 @@
 
 @section('content')
     <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center mb-6 text-cyan-600">{{ __('Pagos Registrados') }}</h2>
+        <!-- Encabezado con botón de volver -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-cyan-600">{{ __('Pagos Registrados') }}</h2>
+            <a href="{{ route('dashboard') }}" class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                ← Volver al Dashboard
+            </a>
+        </div>
 
         @if(session('success'))
             <div class="bg-green-500 text-white p-3 rounded-md mb-4 text-center">
@@ -40,13 +46,11 @@
                                 </span>
                             </td>
                             <td class="border px-4 py-3 text-center flex justify-center space-x-4">
-                                {{-- Descargar comprobante --}}
                                 <a href="{{ route('pagos.pdf', $pago->id) }}"
                                    class="text-blue-600 font-semibold hover:underline">
-                                    📄 Descargar Comprobante
+                                    📄 {{ __('Descargar Comprobante') }}
                                 </a>
 
-                                {{-- Eliminar pago --}}
                                 <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
@@ -66,6 +70,5 @@
                 </tbody>
             </table>         
         </div>
-
     </div>
 @endsection

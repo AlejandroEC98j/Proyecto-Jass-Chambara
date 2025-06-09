@@ -4,144 +4,174 @@
 
 @section('content')
     <style>
-        /* Variables CSS actualizadas */
         :root {
             --primary-color: #0891b2; /* cyan-600 */
-            --primary-color-hover: #0e7490; /* cyan-700 */
-            --primary-text-color: #07575b; /* texto principal */
-            --card-bg-color: #ffffff;
-            --card-shadow: rgba(0, 0, 0, 0.1);
-            --font-family: 'Poppins', 'Segoe UI', sans-serif; /* Fuente más moderna */
-            --secondary-color: #4f46e5; /* Color adicional */
+            --primary-light: #ecfeff; /* cyan-50 */
+            --primary-dark: #0e7490; /* cyan-700 */
+            --secondary-color: #4f46e5; /* indigo-600 */
+            --success-color: #16a34a; /* green-600 */
+            --warning-color: #d97706; /* amber-600 */
+            --danger-color: #dc2626; /* red-600 */
+            --text-primary: #1e293b; /* slate-800 */
+            --text-secondary: #64748b; /* slate-500 */
+            --bg-light: #f8fafc; /* slate-50 */
+            --border-color: #e2e8f0; /* slate-200 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --rounded-sm: 0.25rem;
+            --rounded-md: 0.5rem;
+            --rounded-lg: 0.75rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Importar fuente Poppins de Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        /* Aplicar fuente global */
-        .dashboard-container {
-            font-family: var(--font-family);
-            color: var(--primary-text-color);
-            line-height: 1.6;
+        .dashboard {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            background: linear-gradient(to bottom, var(--bg-light), white);
         }
 
-        /* Título principal con mejor jerarquía */
-        .dashboard-title {
-            color: var(--primary-color);
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 1.5rem;
+        /* Header Styles */
+        .dashboard-header {
             position: relative;
-            display: inline-block;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .dashboard-title::after {
+        .dashboard-header::after {
             content: '';
             position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
             height: 4px;
-            background: var(--primary-color);
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             border-radius: 2px;
         }
 
-        /* Botones mejorados */
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            transition: all 0.3s ease;
-            border: none;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+        .org-name {
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.025em;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-color-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.2);
+        .org-location {
+            color: var(--text-secondary);
+            font-weight: 400;
         }
 
-        /* Tarjetas con efecto hover */
-        .card {
-            background-color: var(--card-bg-color);
-            box-shadow: 0 4px 12px var(--card-shadow);
-            border-radius: 12px;
+        /* Card Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow-md);
             padding: 1.75rem;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .card:hover {
+        .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-lg);
         }
 
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
+        .stat-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            margin: 0 auto 1rem;
             border-radius: 50%;
-            background-color: rgba(8, 145, 178, 0.1);
-            width: 80px;
-            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-count {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+
+        .stat-title {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Colores para íconos */
-        .text-cyan .card-icon {
-            background-color: rgba(8, 145, 178, 0.1);
-            color: var(--primary-color);
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
         }
 
-        .text-green .card-icon {
-            background-color: rgba(22, 163, 74, 0.1);
-            color: #16a34a;
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
         }
 
-        .text-red .card-icon {
-            background-color: rgba(220, 38, 38, 0.1);
-            color: #dc2626;
-        }
-
-        .text-purple .card-icon {
-            background-color: rgba(124, 58, 237, 0.1);
-            color: #7c3aed;
-        }
-
-        /* Botones de navegación mejorados */
         .nav-btn {
-            padding: 0.85rem 1.75rem;
-            border-radius: 8px;
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--rounded-md);
             font-weight: 500;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
             text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
         }
 
         .nav-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
-        .nav-btn:focus {
-            outline: none;
-            ring: 2px solid var(--primary-color);
+        .nav-btn i {
+            font-size: 1rem;
         }
 
-        /* Filtros mejorados */
-        .filters {
+        /* Filter Controls */
+        .filter-controls {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -149,67 +179,102 @@
             margin-bottom: 2rem;
         }
 
-        .filters select {
-            border-radius: 8px;
-            padding: 0.65rem 1rem;
-            border: 1px solid #e2e8f0;
-            font-weight: 500;
-            background-color: #f8fafc;
-            transition: all 0.2s ease;
+        .filter-select {
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--rounded-md);
+            background-color: white;
+            font-size: 0.875rem;
             min-width: 150px;
+            transition: var(--transition);
         }
 
-        .filters select:focus {
+        .filter-select:focus {
+            outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.2);
         }
 
-        /* Contenedor principal */
-        .dashboard-container {
-            background: linear-gradient(to bottom, #f9fbfd, #ffffff);
-            border-radius: 16px;
-            padding: 2.5rem;
+        .filter-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: var(--rounded-md);
+            font-weight: 500;
+            transition: var(--transition);
         }
 
-        /* Texto de información */
-        .info-text {
-            background: rgba(8, 145, 178, 0.05);
-            padding: 1.5rem;
-            border-radius: 12px;
+        .filter-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(to right, rgba(8, 145, 178, 0.1), white);
             border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: var(--rounded-md);
             margin-top: 2rem;
         }
 
-        /* Responsive */
+        .info-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-text {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .dashboard-title {
-                font-size: 1.75rem;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
             }
             
             .nav-btn {
-                padding: 0.75rem 1.25rem;
-                font-size: 0.85rem;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 
-    <div class="max-w-7xl mx-auto dashboard-container p-8 rounded-lg">
-        <!-- Título Principal -->
-        <div class="text-center">
-            <h1 class="dashboard-title text-4xl font-bold inline-block">
-                {{ __('Junta Administradora de Servicios de Saneamiento') }}
+    <div class="max-w-7xl mx-auto dashboard p-6 md:p-8">
+        <!-- Header Section -->
+        <div class="dashboard-header text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                <span class="org-name">JUNTA ADMINISTRADORA DE SERVICIOS DE SANEAMIENTO</span>
             </h1>
-            <p class="text-xl text-gray-600 mt-2">{{ __('Chambara - Concepción') }}</p>
+            <p class="org-location text-lg md:text-xl">Chambara - Concepción</p>
         </div>
 
-        <!-- Filtros -->
-        <div class="filters">
-            <select id="yearFilter" class="border p-2 rounded">
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <select id="yearFilter" class="filter-select">
+                <option value="">Seleccionar año</option>
                 <option value="2025">2025</option>
                 <option value="2024">2024</option>
                 <option value="2023">2023</option>
             </select>
-            <select id="monthFilter" class="border p-2 rounded">
+            
+            <select id="monthFilter" class="filter-select">
+                <option value="">Seleccionar mes</option>
                 <option value="1">Enero</option>
                 <option value="2">Febrero</option>
                 <option value="3">Marzo</option>
@@ -222,72 +287,99 @@
                 <option value="10">Octubre</option>
                 <option value="11">Noviembre</option>
                 <option value="12">Diciembre</option>
-                
             </select>
-            <button id="applyFilter" class="btn-primary cursor-pointer px-6 py-2 rounded-lg">
-                <i class="fas fa-filter mr-2"></i> {{ __('Filtrar') }}
+            
+            <button id="applyFilter" class="filter-btn">
+                <i class="fas fa-filter mr-2"></i> Filtrar
             </button>
         </div>
 
-        <!-- Tarjetas de Información -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach([
-                ['title' => 'Clientes', 'count' => $totalClientes, 'color' => 'cyan', 'icon' => 'fa-users'],
-                ['title' => 'Medidores', 'count' => $totalMedidores, 'color' => 'green', 'icon' => 'fa-tachometer-alt'],
-                ['title' => 'Facturas', 'count' => $totalFacturas, 'color' => 'red', 'icon' => 'fa-file-invoice-dollar'],
-                ['title' => 'Pagos', 'count' => $totalPagos, 'color' => 'purple', 'icon' => 'fa-credit-card']
-            ] as $card)
-                <div class="text-{{ $card['color'] }}">
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas {{ $card['icon'] }}"></i>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-700">{{ $card['title'] }}</h2>
-                        <p class="text-3xl font-bold mt-2">{{ $card['count'] }}</p>
-                    </div>
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <!-- Clientes Card -->
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(8, 145, 178, 0.1); color: var(--primary-color);">
+                    <i class="fas fa-users"></i>
                 </div>
-            @endforeach
+                <div class="stat-count text-cyan-600">{{ $totalClientes }}</div>
+                <div class="stat-title">Clientes Registrados</div>
+            </div>
+            
+            <!-- Medidores Card -->
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(22, 163, 74, 0.1); color: var(--success-color);">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <div class="stat-count text-green-600">{{ $totalMedidores }}</div>
+                <div class="stat-title">Medidores Activos</div>
+            </div>
+            
+            <!-- Facturas Card -->
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(220, 38, 38, 0.1); color: var(--danger-color);">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <div class="stat-count text-red-600">{{ $totalFacturas }}</div>
+                <div class="stat-title">Facturas Emitidas</div>
+            </div>
+            
+            <!-- Pagos Card -->
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(124, 58, 237, 0.1); color: var(--secondary-color);">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="stat-count text-indigo-600">{{ $totalPagos }}</div>
+                <div class="stat-title">Pagos Registrados</div>
+            </div>
         </div>
 
-        <!-- Gráficos (sin cambios) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div class="card h-[400px] flex flex-col justify-center items-center">
-                <h2 class="text-center text-lg font-semibold text-gray-700 mb-3">Consumo Promedio</h2>
-                <div class="w-full h-[300px]">
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Consumo Chart -->
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-chart-bar mr-2"></i> Consumo Promedio (m³)
+                </h3>
+                <div class="chart-wrapper">
                     <canvas id="consumptionChart"></canvas>
                 </div>
             </div>
-            <div class="card h-[400px] flex flex-col justify-center items-center">
-                <h2 class="text-center text-lg font-semibold text-gray-700 mb-3">Estado de Pagos</h2>
-                <div class="w-full h-[300px]">
+            
+            <!-- Pagos Chart -->
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-chart-pie mr-2"></i> Estado de Pagos
+                </h3>
+                <div class="chart-wrapper">
                     <canvas id="paymentsChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Botones de Navegación -->
-        <div class="mt-8 text-center space-x-4 space-y-4 sm:space-y-0">
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
             <a href="{{ route('clientes.index') }}" class="nav-btn bg-cyan-600 text-white hover:bg-cyan-700">
-                <i class="fas fa-users"></i> {{ __('Clientes') }}
+                <i class="fas fa-users"></i> Clientes
             </a>
             <a href="{{ route('medidores.index') }}" class="nav-btn bg-green-600 text-white hover:bg-green-700">
-                <i class="fas fa-tachometer-alt"></i> {{ __('Medidores') }}
+                <i class="fas fa-tachometer-alt"></i> Medidores
             </a>
             <a href="{{ route('facturas.index') }}" class="nav-btn bg-red-600 text-white hover:bg-red-700">
-                <i class="fas fa-file-invoice-dollar"></i> {{ __('Facturas') }}
+                <i class="fas fa-file-invoice-dollar"></i> Facturas
             </a>
             <a href="{{ route('pagos.index') }}" class="nav-btn bg-purple-600 text-white hover:bg-purple-700">
-                <i class="fas fa-credit-card"></i> {{ __('Pagos') }}
+                <i class="fas fa-credit-card"></i> Pagos
             </a>
         </div>
 
-        <!-- Información Adicional -->
-        <div class="info-text">
-            <p class="text-lg font-semibold text-cyan-600 mb-2">
-                <i class="fas fa-tint mr-2"></i>{{ __('Cuidemos el agua. ¡Cada gota cuenta!') }}
-            </p>
-            <p class="text-gray-600">
-                {{ __('JASS Chambara - Proveedor de agua y servicios de saneamiento para nuestra comunidad.') }}
+        <!-- Info Banner -->
+        <div class="info-banner">
+            <h4 class="info-title">
+                <i class="fas fa-tint"></i> Cuidemos el agua. ¡Cada gota cuenta!
+            </h4>
+            <p class="info-text">
+                JASS Chambara - Proveedor de agua y servicios de saneamiento para nuestra comunidad.
+                Reporte cualquier fuga o anomalía en el suministro.
             </p>
         </div>
     </div>
@@ -295,46 +387,101 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const ctx1 = document.getElementById('consumptionChart')?.getContext('2d');
-            const ctx2 = document.getElementById('paymentsChart')?.getContext('2d');
-
-            if (ctx1) {
-                new Chart(ctx1, {
+            // Consumption Chart
+            const consumptionCtx = document.getElementById('consumptionChart')?.getContext('2d');
+            if (consumptionCtx) {
+                new Chart(consumptionCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Enero', 'Febrero', 'Marzo'],
+                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
                         datasets: [{
-                            label: 'Consumo Promedio (m³)',
-                            data: [50, 70, 60],
-                            backgroundColor: 'rgba(8, 145, 178, 0.5)'
+                            label: 'Consumo (m³)',
+                            data: [35, 42, 38, 45, 50, 48],
+                            backgroundColor: 'rgba(8, 145, 178, 0.7)',
+                            borderColor: 'rgba(8, 145, 178, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.parsed.y} m³`;
+                                    }
+                                }
+                            }
+                        },
                         scales: {
-                            y: { beginAtZero: true }
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Metros Cúbicos (m³)'
+                                }
+                            }
                         }
                     }
                 });
             }
 
-            if (ctx2) {
-                new Chart(ctx2, {
-                    type: 'pie',
+            // Payments Chart
+            const paymentsCtx = document.getElementById('paymentsChart')?.getContext('2d');
+            if (paymentsCtx) {
+                new Chart(paymentsCtx, {
+                    type: 'doughnut',
                     data: {
-                        labels: ['Pagado', 'Pendiente'],
+                        labels: ['Pagados', 'Pendientes', 'Vencidos'],
                         datasets: [{
-                            data: [80, 20],
-                            backgroundColor: ['#4CAF50', '#F44336']
+                            data: [75, 15, 10],
+                            backgroundColor: [
+                                'rgba(22, 163, 74, 0.7)',
+                                'rgba(234, 179, 8, 0.7)',
+                                'rgba(220, 38, 38, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(22, 163, 74, 1)',
+                                'rgba(234, 179, 8, 1)',
+                                'rgba(220, 38, 38, 1)'
+                            ],
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.parsed}%`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '70%'
                     }
                 });
             }
+
+            // Filter functionality
+            document.getElementById('applyFilter')?.addEventListener('click', function() {
+                const year = document.getElementById('yearFilter').value;
+                const month = document.getElementById('monthFilter').value;
+                
+                // Aquí iría la lógica para actualizar los datos con el filtro
+                console.log(`Filtrar por año: ${year}, mes: ${month}`);
+                // Podrías hacer una petición AJAX para actualizar los datos
+            });
         });
     </script>
 @endsection
