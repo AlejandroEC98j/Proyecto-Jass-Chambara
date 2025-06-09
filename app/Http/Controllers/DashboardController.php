@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $facturasVencidas = Factura::where('estado', 'vencido')->get();
 
         // Obtener los pagos por mes (esto es solo un ejemplo, ajusta según tu lógica)
-        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril'];  // Ejemplo de meses
+        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];  // Ejemplo de meses
         $pagosPorMes = [100, 150, 120, 80];  // Ejemplo de pagos por mes
 
         return view('dashboard', [

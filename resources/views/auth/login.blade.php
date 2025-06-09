@@ -2,62 +2,71 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <!-- Contenedor principal con fondo blanco -->
-    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <!-- Logo de JASS -->
-        <div class="text-center mb-6">
-            <img src="{{ asset('jass-unas.jpg') }}" alt="Logo del JASS" class="h-24 mx-auto">
+    <div class="max-w-md mx-auto bg-white p-10 rounded-xl shadow-sm border border-gray-100">
+        <!-- Encabezado elegante -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">JASS Chambara</h1>
+            <p class="text-gray-600">{{ __('Acceso al sistema') }}</p>
         </div>
 
-        <h2 class="text-2xl font-bold text-center mb-6 text-cyan-600">{{ __('Iniciar Sesión') }}</h2>
-
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+        <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-input-label for="email" :value="__('Correo Electrónico')" />
-                <x-text-input id="email" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500" 
-                              type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <!-- Email -->
+            <div class="mb-5">
+                <x-input-label for="email" :value="__('Correo Electrónico')" class="mb-1 block text-sm font-medium text-gray-700" />
+                <x-text-input id="email" 
+                    class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-300 focus:border-transparent transition"
+                    type="email" 
+                    name="email" 
+                    :value="old('email')" 
+                    required 
+                    autofocus 
+                    autocomplete="username" />
+                <x-input-error :messages="$errors->get('email')" class="mt-1 text-sm text-red-600" />
             </div>
 
             <!-- Password -->
-            <div class="mt-4">
-                <x-input-label for="password" :value="__('Contraseña')" />
-                
-                <x-text-input id="password" class="block mt-1 w-full p-3 border border-cyan-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                              type="password" name="password" required autocomplete="current-password"
-                              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
-                              title="Debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial." />
-                
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-            
-            <!-- Remember Me -->
-            <div class="flex items-center mt-4">
-                <input id="remember_me" type="checkbox" class="rounded border-cyan-300 text-cyan-600 focus:ring-cyan-500" name="remember">
-                <label for="remember_me" class="ml-2 text-sm text-gray-600">{{ __('Recuérdame') }}</label>
+            <div class="mb-5">
+                <x-input-label for="password" :value="__('Contraseña')" class="mb-1 block text-sm font-medium text-gray-700" />
+                <x-text-input id="password" 
+                    class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-300 focus:border-transparent transition"
+                    type="password" 
+                    name="password" 
+                    required 
+                    autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-1 text-sm text-red-600" />
             </div>
 
-            <!-- Forgot Password Link & Submit Button -->
-            <div class="flex justify-between items-center mt-4">
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <input id="remember_me" name="remember" type="checkbox" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded">
+                    <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+                        {{ __('Recordar sesión') }}
+                    </label>
+                </div>
+                
                 @if (Route::has('password.request'))
                     <a class="text-sm text-cyan-600 hover:text-cyan-800" href="{{ route('password.request') }}">
-                        {{ __('¿Olvidaste tu contraseña?') }}
+                        {{ __('¿Olvidó su contraseña?') }}
                     </a>
                 @endif
-                <x-primary-button class="bg-cyan-600 text-white py-2 px-4 rounded-md hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    {{ __('Iniciar Sesión') }}
-                </x-primary-button>
             </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-medium py-3 px-4 rounded-lg shadow transition duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+                {{ __('Iniciar Sesión') }}
+            </button>
         </form>
 
-        <!-- Register Link -->
-        <div class="mt-6 text-center">
+        <!-- Registration Link -->
+        <div class="mt-8 text-center pt-6 border-t border-gray-100">
             <p class="text-sm text-gray-600">
-                {{ __('¿Aún no tienes cuenta?') }}
-                <a href="{{ route('register') }}" class="text-cyan-600 hover:text-cyan-800 font-medium">{{ __('Regístrate aquí') }}</a>
+                {{ __('¿No tiene una cuenta?') }}
+                <a href="{{ route('register') }}" class="font-medium text-cyan-600 hover:text-cyan-700">
+                    {{ __('Regístrese aquí') }}
+                </a>
             </p>
         </div>
     </div>
