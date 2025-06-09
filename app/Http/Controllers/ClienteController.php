@@ -8,10 +8,18 @@ use Illuminate\Support\Facades\Log;
 
 class ClienteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $clientes = Cliente::all();
+            $search = $request->input('search');
+            
+            $clientes = Cliente::when($search, function($query) use ($search) {
+                return $query->where('nombre', 'like', "%$search%")
+                            ->orWhere('dni', 'like', "%$search%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10); // Paginación con 10 elementos por página
+            
             return view('clientes.index', compact('clientes'));
         } catch (\Exception $e) {
             Log::error('Error al obtener clientes: ' . $e->getMessage());
@@ -19,6 +27,7 @@ class ClienteController extends Controller
         }
     }
 
+    // Los demás métodos permanecen exactamente igual
     public function create()
     {
         return view('clientes.create');
@@ -27,7 +36,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string|size:8|unique:clientes,dni', // Validación del DNI exacto de 8 dígitos
+            'dni' => 'required|string|size:8|unique:clientes,dni',
             'nombre' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
             'telefono' => 'nullable|string|max:15',

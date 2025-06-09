@@ -17,6 +17,27 @@
             </div>
         @endif
 
+        <!-- Buscador -->
+        <div class="mb-6">
+            <form action="{{ route('clientes.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-grow">
+                    <input type="text" name="search" placeholder="Buscar por nombre o DNI" 
+                           value="{{ request('search') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+                <button type="submit" 
+                        class="bg-cyan-600 text-white font-semibold px-6 py-2 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                    🔍 Buscar
+                </button>
+                @if(request()->has('search'))
+                    <a href="{{ route('clientes.index') }}" 
+                       class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                        Limpiar
+                    </a>
+                @endif
+            </form>
+        </div>
+
         <div class="overflow-x-auto">
             <table class="w-full border-collapse border border-gray-300 rounded-lg shadow-md">
                 <thead class="bg-cyan-100 text-gray-700">
@@ -56,12 +77,25 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="8" class="py-4 text-gray-500">{{ __('No hay clientes registrados') }}</td>
+                            <td colspan="8" class="py-4 text-gray-500">
+                                @if(request()->has('search'))
+                                    {{ __('No se encontraron clientes que coincidan con la búsqueda') }}
+                                @else
+                                    {{ __('No hay clientes registrados') }}
+                                @endif
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación -->
+        @if($clientes->hasPages())
+            <div class="mt-4">
+                {{ $clientes->appends(request()->query())->links() }}
+            </div>
+        @endif
 
         <div class="mt-8 flex justify-center">
             <a href="{{ route('clientes.create') }}" class="bg-cyan-600 text-white font-semibold px-6 py-3 rounded-md shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
